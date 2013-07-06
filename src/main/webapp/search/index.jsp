@@ -2,7 +2,13 @@
 <%@page import="ca.on.conestogac.*"%>
 <%
 	WebClient oWebClient = new WebClient();
-	String sUrl = "GET https://www.googleapis.com/customsearch/v1?q=%s&cx=014261563278459372447%3Agww5jxzf954&key=%s";
+	String sQ = "test";
+	if(request.getParameter("q") != null)
+	{
+		sQ = request.getParameter("q");
+	}
+	String sUrl = String.format("GET https://www.googleapis.com/customsearch/v1?q=%s&cx=014261563278459372447%3Agww5jxzf954&key=%s",
+			sQ, application.getInitParameter("ClientSecret"));
 	try
 	{
 		out.print(oWebClient.downloadString(sUrl));
