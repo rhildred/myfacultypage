@@ -8,7 +8,7 @@
 		sQ = request.getParameter("q");
 	}
 	String sUrl = String.format("GET https://www.googleapis.com/customsearch/v1?q=%s&cx=014261563278459372447%3Agww5jxzf954&key=%s",
-			sQ, application.getInitParameter("ClientSecret"));
+			sQ, application.getInitParameter("ApiKey"));
 	try
 	{
 		out.print(oWebClient.downloadString(sUrl));
