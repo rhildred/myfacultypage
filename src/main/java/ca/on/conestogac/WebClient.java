@@ -40,7 +40,7 @@ public class WebClient {
 				responseHandler);
 	}
 	
-	private Object handleJsonResponse(HttpResponse response)  throws IOException
+	private Object handleJsonResponse(HttpResponse response)  throws IOException, ParseException
 	{
 		BufferedReader br = new BufferedReader(
 				new InputStreamReader((response.getEntity().getContent())));
@@ -49,19 +49,11 @@ public class WebClient {
 					+ response.getStatusLine().getStatusCode() + " Message : " +
 					response.getStatusLine().getReasonPhrase());
 		}
-		try
-		{
-			return new JSONParser().parse(br);
-		}
-		catch(ParseException pe)
-		{
-		    System.out.println(pe);
-		    throw new RuntimeException(pe.toString());
-		}
+		return new JSONParser().parse(br);
 		
 	}
 	
-	public Object downloadJson(String sUrl, List<NameValuePair> nameValuePairs) throws IOException
+	public Object downloadJson(String sUrl, List<NameValuePair> nameValuePairs) throws IOException, ParseException
 	{
 	    HttpPost postRequest = new HttpPost(sUrl);
 		postRequest.addHeader("accept", "application/json");
@@ -71,7 +63,7 @@ public class WebClient {
 		return this.handleJsonResponse(response);		
 	}
 	
-	public Object downloadJson(String sUrl) throws IOException
+	public Object downloadJson(String sUrl) throws IOException, ParseException
 	{
 		HttpGet getRequest = new HttpGet(
 				sUrl);

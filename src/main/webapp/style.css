@@ -138,8 +138,13 @@ a:hover {
 	display:none;
 }
 
-#main, arcticle {
+#main, article {
 	margin					: 5px;
+	padding-bottom: 2em;
+}
+
+article aside {
+	display:none;
 }
 
 @media screen and (min-width: 750px) {
