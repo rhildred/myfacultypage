@@ -28,6 +28,7 @@ try{
 	Map m2 = new HashMap();
 	m2.put("name", oauth2.getName());
 	m2.put("googleId", oauth2.getGoogleId());
+	m2.put("email", oauth2.getEmail());
 	out.print(JSONValue.toJSONString(m2));
 }
 catch(Exception e)

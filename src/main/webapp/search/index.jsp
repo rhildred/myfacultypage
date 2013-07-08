@@ -22,21 +22,24 @@ try
 		}
 		String sUrl = String.format("https://www.googleapis.com/customsearch/v1?q=%s&cx=014261563278459372447:gww5jxzf954&key=%s",
 				sQ, application.getInitParameter("ApiKey"));
-		
+		sb.append("<article>");
 		JSONObject jsonObject = (JSONObject)oWebClient.downloadJson(sUrl);
 		// loop array
 		JSONArray msg = (JSONArray) jsonObject.get("items");
 		Iterator<JSONObject> iterator = msg.iterator();
 		while (iterator.hasNext()) {
 			JSONObject oResult = iterator.next();
-			Source link = new Source(new URL((String)oResult.get("link")));
-			List<StartTag> linkStartTags2=link.getAllStartTags("article");
-			if(!linkStartTags2.isEmpty())
-			{
-				sb.append(linkStartTags2.get(0).getElement().toString());
-			}
+			sb.append("<a href=\"" + (String)oResult.get("link") + "\">");
+			sb.append((String)oResult.get("htmlTitle") + "</a>");
+			sb.append("<p>" + (String)oResult.get("htmlSnippet") + "</p>");
+			//Source link = new Source(new URL((String)oResult.get("link")));
+			//List<StartTag> linkStartTags2=link.getAllStartTags("article");
+			//if(!linkStartTags2.isEmpty())
+			//{
+			//	sb.append(linkStartTags2.get(0).getElement().toString());
+			//}
 		}
-		
+		sb.append("</article>");		
 		List<StartTag> linkStartTags=source.getAllStartTags("article");
 		outputDocument.replace(linkStartTags.get(0).getElement(),sb.toString());
 		outputDocument.writeTo(out);

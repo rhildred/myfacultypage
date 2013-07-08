@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.http.*;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 import javax.servlet.http.*;
 
@@ -31,14 +32,14 @@ public class Oauth2 {
 	}
 
 	public void redirect(HttpServletResponse res) throws IOException {
-		String sAuthUrl = "https://accounts.google.com/o/oauth2/auth?redirect_uri=%s&client_id=%s&scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&max_auth_age=0";
+		String sAuthUrl = "https://accounts.google.com/o/oauth2/auth?redirect_uri=%s&client_id=%s&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&max_auth_age=0";
 		String sRedirectToGoogle = String.format(sAuthUrl, this.sRedirect,
 				this.sKey);
 		res.sendRedirect(sRedirectToGoogle);
 
 	}
 	
-	public void handleCode(String sCode) throws IOException
+	public void handleCode(String sCode) throws IOException, ParseException
     {
         if (this.Session.getAttribute("sGoogleId") == null)
         {
@@ -60,6 +61,7 @@ public class Oauth2 {
             JSONObject oInfo = (JSONObject) conn.downloadJson(String.format(sUserInfoUrl, sAccessToken));
             this.Session.setAttribute("sName", (String)oInfo.get("name"));
             this.Session.setAttribute("sGoogleId", (String)oInfo.get("id"));
+            this.Session.setAttribute("sEmail", (String)oInfo.get("email"));
   
         }
                   
@@ -75,6 +77,11 @@ public class Oauth2 {
 		return (String)this.Session.getAttribute("sGoogleId");
 	}
 	
+	public String getEmail()
+	{
+		return (String)this.Session.getAttribute("sEmail");
+	}
+
 	public void close() {
 		this.conn.dispose();
 	}
